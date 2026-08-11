@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OLLIN : MUUL — The Gatherer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0B0C10; --surface:#14161F; --raised:#1C1F2B; --border:#222634;
+  --white:#FFFFFF; --slate:#94A3B8; --body:#C9D3DE; --dim:#77879A;
+  --volt:#D4FF00; --volt-tint:rgba(212,255,0,.12); --on-volt:#14180A;
+  --ember:#FF4500;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Archivo',system-ui,sans-serif;font-weight:500;line-height:1.55;-webkit-font-smoothing:antialiased;font-size:15px}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;font-size:10px;color:var(--slate)}
+::selection{background:var(--volt);color:var(--on-volt)}
+
+/* ---------- masthead ---------- */
+.masthead{border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(11,12,16,.95);backdrop-filter:blur(10px);z-index:60}
+.mrow{max-width:1200px;margin:0 auto;padding:13px 32px;display:flex;align-items:center;gap:26px}
+.mword{font-weight:900;font-size:17px;letter-spacing:-.01em}
+.mword i{font-style:normal;color:var(--volt)}
+.mnav{display:flex;gap:2px;overflow-x:auto;margin-left:auto}
+.mnav a{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-decoration:none;padding:7px 11px;border-radius:6px;white-space:nowrap}
+.mnav a:hover{color:var(--white)}
+.streak{background:var(--volt);color:var(--on-volt);border:none;border-radius:6px;padding:8px 13px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+
+.page{max-width:1200px;margin:0 auto;padding:0 32px}
+
+/* ---------- hero ---------- */
+.hero{padding:110px 0 90px}
+.kicker{display:flex;align-items:baseline;gap:22px;flex-wrap:wrap}
+.kicker .rule{flex:1;height:1px;background:var(--border);align-self:center}
+h1{font-weight:900;font-size:clamp(64px,13vw,190px);line-height:.82;letter-spacing:-.035em;margin:34px 0 0;text-transform:uppercase}
+h1 .ghost{color:transparent;-webkit-text-stroke:1.5px #2E3444}
+h1 .v{color:var(--volt)}
+h1 .hl{position:relative;z-index:1;background:var(--volt);color:var(--on-volt);padding:0 .07em;box-shadow:0 0 70px rgba(212,255,0,.4),0 0 24px rgba(212,255,0,.25)}
+h1 .top{position:relative;z-index:3}
+.deck{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:54px;align-items:end}
+@media(max-width:860px){.deck{grid-template-columns:1fr;gap:26px}}
+.deck .standfirst{font-weight:700;font-size:clamp(19px,2.6vw,27px);line-height:1.3;letter-spacing:-.01em}
+.deck .standfirst em{font-style:normal;color:var(--volt)}
+.deck p{color:var(--slate);font-size:15px;max-width:48ch}
+.deck p b{color:var(--body)}
+
+/* ---------- editorial sections ---------- */
+section{border-top:1px solid var(--border);padding:84px 0}
+.sec{display:grid;grid-template-columns:220px 1fr;gap:56px}
+@media(max-width:920px){.sec{grid-template-columns:1fr;gap:26px}}
+.rail{position:relative}
+.rail .inner{position:sticky;top:96px}
+.rail .no{font-weight:900;font-size:clamp(44px,6vw,72px);line-height:.9;letter-spacing:-.03em;color:transparent;-webkit-text-stroke:1.3px #2E3444}
+.rail .rt{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--slate);margin-top:16px;line-height:2}
+.rail .rt b{color:var(--volt);font-weight:700}
+.content h2{font-weight:900;font-size:clamp(34px,5vw,58px);line-height:.94;letter-spacing:-.025em;margin-bottom:18px;text-transform:uppercase}
+.content h2 .v{color:var(--volt)}
+.lede{color:var(--slate);font-size:16.5px;max-width:58ch;margin-bottom:36px;line-height:1.6}
+.lede strong{color:var(--white)}
+.pull{border-left:2px solid var(--volt);padding:6px 0 6px 22px;margin:0 0 36px;font-weight:700;font-size:clamp(17px,2.2vw,21px);line-height:1.4;letter-spacing:-.005em;max-width:56ch}
+.pull i{font-style:normal;color:var(--volt)}
+
+/* blocks (flat editorial cards) */
+.blk{border-top:1px solid var(--border);padding:28px 0}
+.blk:last-child{border-bottom:1px solid var(--border)}
+.bh{display:flex;align-items:baseline;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.bh h3{font-weight:900;font-size:16px;letter-spacing:-.005em;text-transform:uppercase}
+.bh .mono{font-size:9px}
+.pill{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;padding:4px 10px;border-radius:999px;font-weight:700}
+.pill.volt{background:var(--volt-tint);color:var(--volt)}
+.pill.solid{background:var(--volt);color:var(--on-volt)}
+.pill.dim{background:rgba(148,163,184,.12);color:var(--slate)}
+
+label,.lab{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:18px 0 7px;display:block}
+.lab:first-child{margin-top:0}
+input[type=text],input[type=number],textarea,select{width:100%;background:transparent;color:var(--white);border:1px solid var(--border);border-radius:0;padding:12px 14px;font-size:15px;font-family:'Archivo',sans-serif}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--volt)}
+textarea{resize:vertical;min-height:76px}
+select{background:var(--black)}
+.btn{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--volt);color:var(--on-volt);border:1px solid var(--volt);border-radius:0;padding:11px 20px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn:hover{background:transparent;color:var(--volt)}
+.btn.ghost{background:transparent;border-color:var(--border);color:var(--slate)}
+.btn.ghost:hover{color:var(--white);border-color:var(--slate)}
+.btn.ai{display:inline-flex;align-items:center;gap:8px;background:var(--raised);border:1px solid var(--border);border-radius:999px;color:var(--body);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:10px 16px 10px 13px}
+.btn.ai:hover{border-color:#3A4152;color:var(--white);background:var(--raised)}
+.aimark{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:var(--volt-tint);color:var(--volt);font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;flex:none}
+.btn.x{background:transparent;border-color:var(--border);color:var(--dim);padding:9px 12px}
+.btn.x:hover{color:var(--white)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:720px){.grid2{grid-template-columns:1fr}}
+
+.check{display:flex;align-items:flex-start;gap:13px;padding:13px 0;cursor:pointer;border-top:1px solid var(--border)}
+.check:first-of-type{border-top:none}
+.check input{width:17px;height:17px;margin-top:3px;accent-color:var(--volt);cursor:pointer;flex:none}
+.check .txt{font-size:15px;font-weight:700}
+.check .why{font-size:12.5px;color:var(--dim);margin-top:2px;font-weight:500}
+.check.done .txt{text-decoration:line-through;color:var(--dim)}
+.progress-outer{background:var(--surface);height:3px;overflow:hidden;margin:14px 0 6px}
+.progress-inner{height:100%;background:var(--volt);transition:width .3s}
+
+.mixbar{display:flex;height:34px;overflow:hidden;margin:12px 0;background:var(--surface)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--slate);margin-top:10px}
+.legend b{color:var(--white)}
+.dot{display:inline-block;width:9px;height:9px;margin-right:6px}
+
+.post-item{border:1px solid var(--border);padding:16px;margin-top:12px}
+.post-item .hook{font-weight:700;font-size:14.5px;white-space:pre-wrap}
+.post-item .meta{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--dim);letter-spacing:.05em}
+.hookpreview{background:#f3f2ef;color:#191919;padding:14px 16px;font-size:14px;line-height:1.45;margin-top:12px;max-width:540px;font-family:-apple-system,'Segoe UI',sans-serif}
+.hookpreview .seemore{color:#666;font-weight:600}
+
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+th{font-family:'IBM Plex Mono',monospace;color:var(--dim);text-align:left;font-size:9px;letter-spacing:.14em;padding:10px 8px;border-bottom:1px solid var(--border);text-transform:uppercase;font-weight:500}
+td{padding:11px 8px;border-bottom:1px solid var(--border);color:var(--body)}
+.big{font-weight:900;font-size:clamp(44px,6vw,74px);line-height:.9;letter-spacing:-.03em}
+.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border)}
+@media(max-width:620px){.statgrid{grid-template-columns:1fr}}
+.stat{padding:26px 22px;text-align:left}
+.stat+.stat{border-left:1px solid var(--border)}
+@media(max-width:620px){.stat+.stat{border-left:none;border-top:1px solid var(--border)}}
+.note{font-size:12.5px;color:var(--dim);margin-top:10px}
+.note b{color:var(--body)}
+.timer{font-weight:900;font-size:clamp(40px,5vw,58px);letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
+
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--volt);color:var(--on-volt);font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:12px 24px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:200}
+.toast.show{opacity:1}
+
+footer{border-top:1px solid var(--border);padding:44px 32px 120px;max-width:1200px;margin:0 auto}
+.frow{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .mono{line-height:2.2}
+
+/* ---------- OLLIN:AI ---------- */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ailaunch{position:fixed;bottom:24px;right:24px;z-index:150;display:inline-flex;align-items:center;gap:14px;background:#16181D;border:1px solid #23262E;border-radius:999px;padding:7px 7px 7px 22px;cursor:pointer;box-shadow:0 14px 44px rgba(0,0,0,.55)}
+.ailaunch .ph{color:#7D8694;font-size:14px;font-family:'Archivo',sans-serif}
+.ailaunch .go{width:38px;height:38px;border-radius:50%;background:var(--volt);color:var(--on-volt);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;box-shadow:0 0 18px rgba(212,255,0,.3)}
+.ailaunch:hover{border-color:#2E323C}
+.drawer{position:fixed;right:24px;bottom:24px;width:min(400px,calc(100vw - 32px));height:min(620px,calc(100vh - 90px));z-index:180;display:flex;flex-direction:column;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .2s ease,transform .2s ease;border:1px solid #262B34;border-radius:20px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.6);background:radial-gradient(90% 40% at 50% 0%,rgba(212,255,0,.055),transparent 65%),#0E1014}
+.drawer.open{opacity:1;transform:none;pointer-events:auto}
+.scrim{display:none !important}
+.dhead{padding:20px 22px 14px;display:flex;flex-direction:column;gap:4px;position:relative}
+.dhead .guide{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:#7D8694;font-weight:700}
+.dhead .t{font-weight:700;font-size:17px}
+.dhead .close{position:absolute;top:18px;right:18px;background:none;border:1px solid #23262E;border-radius:999px;color:#7D8694;padding:6px 12px;cursor:pointer;font-size:11px;font-family:'Archivo',sans-serif}
+.dhead .close:hover{color:var(--white)}
+.dchat{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;font-family:'Archivo',sans-serif}
+.msg{max-width:88%;padding:13px 16px;font-size:14px;line-height:1.55;border-radius:18px;white-space:pre-wrap}
+.msg.user{align-self:flex-end;background:#EDEDE4;border:none;color:#111318;border-bottom-right-radius:6px;font-weight:500}
+.msg.ai{align-self:flex-start;background:#05060A;border:1px solid #2A2F3A;color:#E4EAF2;border-bottom-left-radius:6px}
+.msg .tagme{font-size:9px;letter-spacing:.28em;color:rgba(17,19,24,.5);text-transform:uppercase;margin-bottom:7px;font-weight:700;text-align:right}
+.msg.ai .tagai{font-size:9px;letter-spacing:.28em;color:#98A2B0;text-transform:uppercase;margin-bottom:7px;font-weight:700}
+.msg .useit{margin-top:12px;display:flex;gap:8px}
+.quick{display:flex;gap:6px;flex-wrap:wrap;padding:0 20px 12px}
+.quick button{font-size:12px;background:#16181D;border:1px solid #23262E;color:#AAB3C0;padding:8px 14px;border-radius:999px;cursor:pointer;font-family:'Archivo',sans-serif}
+.quick button:hover{border-color:rgba(212,255,0,.5);color:var(--white)}
+.dinput{padding:12px 18px 18px}
+.pillbar{display:flex;align-items:center;gap:8px;background:#1A1D23;border:1px solid #262A33;border-radius:999px;padding:6px 6px 6px 20px}
+.pillbar input{flex:1;background:transparent;border:none;color:var(--white);font-size:14.5px;font-family:'Archivo',sans-serif;padding:9px 0;min-width:0}
+.pillbar input::placeholder{color:#7D8694}
+.pillbar input:focus{outline:none}
+.micbtn{width:38px;height:38px;border-radius:50%;border:1px solid #2C313B;background:transparent;color:#AAB3C0;cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center}
+.micbtn:hover{color:var(--white)}
+.sendbtn{width:40px;height:40px;border-radius:50%;background:var(--volt);border:none;color:var(--on-volt);font-size:16px;font-weight:700;cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center;transition:opacity .15s;box-shadow:0 0 18px rgba(212,255,0,.3)}
+.sendbtn:hover{opacity:.85}
+.dkey{border-top:1px solid #1D2027;padding:12px 20px}
+.dkey input{font-family:'IBM Plex Mono',monospace;font-size:11px;border-radius:999px}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:170;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.on{opacity:1;pointer-events:auto}
+.thinking{color:#7D8694;font-size:13px}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="mrow">
+    <div class="mword">MUUL<i>.</i></div>
+    <div class="mnav">
+      <a href="#today">Today</a><a href="#foundation">01</a><a href="#mix">02</a><a href="#batch">03</a><a href="#engage">04</a><a href="#score">05</a>
+    </div>
+    <button class="streak" onclick="bumpStreak()">Streak <span id="streakNum">0</span>d</button>
+  </div>
+</div>
+
+<div class="page">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="kicker">
+      <span class="mono">Ollin : Systems</span><span class="rule"></span>
+      <span class="mono">Vol. 01 · The Gatherer</span><span class="rule"></span>
+      <span class="mono">Content = Pipeline</span>
+    </div>
+    <h1>Post <span class="top">like</span><br>you <span class="hl">mean</span> it<span class="v">.</span></h1>
+    <div class="deck">
+      <div class="standfirst">Show up on the feed — consistently, without the dread. One post. One routine. Every day. <em>MUUL keeps the streak honest.</em></div>
+      <p><b>The logic:</b> content is an organic extension of your sales pipeline — never a vanity exercise. Five numbered moves, top to bottom on this page. <b>OLLIN:AI</b> rides in the corner the whole way — drafting, fixing hooks, answering questions.</p>
+    </div>
+  </div>
+</div>
+
+<div id="app"></div>
+
+<footer>
+  <div class="frow">
+    <button class="btn ghost" onclick="exportData()">Export data</button>
+    <button class="btn ghost" onclick="document.getElementById('importFile').click()">Import data</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+  <div class="mono" style="margin-top:22px">Ollin : MUUL · Vol. 01 · Aug 2026<br>Data lives in this session — export before closing.<br>Life in black &amp; white. AI in color.</div>
+</footer>
+
+<!-- OLLIN:AI -->
+<div class="scrim" id="scrim" onclick="toggleAI(false)"></div>
+<button class="ailaunch" onclick="toggleAI(true)"><span class="ph">Ask OLLIN:AI</span><span class="go">→</span></button>
+<div class="drawer" id="drawer">
+  <div class="dhead">
+    <span class="guide">Your guide</span>
+    <span class="t">OLLIN:AI</span>
+    <button class="close" onclick="toggleAI(false)">Esc</button>
+  </div>
+  <div class="dchat" id="dchat">
+    <div class="msg ai"><div class="tagai">Ollin</div>I'm here. I know your ICP, your drafts, and your mix. Ask in plain language, or hit a quick action — I'll draft posts, fix hooks, and answer questions.
+
+No API key? I'll build the perfect prompt with all your context and copy it — paste it to Claude and bring back the answer.</div>
+  </div>
+  <div class="quick">
+    <button onclick="quickAI('draft')">Draft today's post</button>
+    <button onclick="quickAI('hook')">Fix my hook</button>
+    <button onclick="quickAI('news')">News fuel</button>
+    <button onclick="quickAI('chicago')">Chicago angle</button>
+    <button onclick="quickAI('review')">Review my mix</button>
+  </div>
+  <div class="dinput">
+    <div class="pillbar">
+      <input type="text" id="aiInput" placeholder="Ask OLLIN:AI" onkeydown="if(event.key==='Enter'){event.preventDefault();sendAI();}">
+      <button class="micbtn" onclick="toast('Voice coming soon')" title="Voice"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/></svg></button>
+      <button class="sendbtn" onclick="sendAI()">→</button>
+    </div>
+  </div>
+  <div class="dkey">
+    <span class="lab" style="margin:0 0 6px">Anthropic API key — optional · in-memory only, never saved</span>
+    <input type="text" id="apiKey" placeholder="sk-ant-… (leave empty for copy-prompt mode)">
+  </div>
+</div>
+
+<div class="toast" id="toast">Copied</div>
+
+<script>
+/* ============================================================
+   OLLIN : MUUL — the Gatherer · editorial edition
+   01 FOUNDATION → profile = the landing page every post drives to
+   02 MIX        → 40 educate / 30 prove / 20 provoke / 10 offer
+   03 BATCH      → one weekly block feeds daily posting
+   04 ENGAGE     → conversations convert readers into pipeline
+   05 SCORE      → DMs, ICP views, meetings — never likes
+   ============================================================ */
+const S = {
+  streak:0, postedDays:[], lastDay:"",
+  foundation:{icp:"",problems:"",headline:"",about:"",checks:{}},
+  today:{checks:{},idea:""},
+  posts:[], ideas:{edu:"",proof:"",contrarian:"",offer:""},
+  dms:[], metrics:[], chat:[],
+};
+/* --- persistence + day logic (America/Chicago) --- */
+const DAY=()=>new Date().toLocaleDateString('en-CA',{timeZone:'America/Chicago'});
+function persist(){try{localStorage.setItem('muul-state',JSON.stringify(S))}catch(e){}}
+function computeStreak(){
+  const days=[...new Set(S.postedDays)].sort().reverse();
+  if(!days.length)return 0;
+  const today=DAY();
+  const yest=new Date(Date.now()-864e5).toLocaleDateString('en-CA',{timeZone:'America/Chicago'});
+  if(days[0]!==today&&days[0]!==yest)return 0;
+  let n=1;
+  for(let i=1;i<days.length;i++){
+    if((new Date(days[i-1])-new Date(days[i]))/864e5===1)n++;else break;
+  }
+  return n;
+}
+function markToday(){const d=DAY();if(!S.postedDays.includes(d))S.postedDays.push(d);S.streak=computeStreak();persist();renderStreak();}
+const TYPES = {
+  edu:{name:"Educate",full:"Educational & Tactical",target:40,color:"#D4FF00"},
+  proof:{name:"Prove",full:"Social Proof & Cases",target:30,color:"rgba(212,255,0,.6)"},
+  contrarian:{name:"Provoke",full:"Perspective & Contrarian",target:20,color:"rgba(212,255,0,.34)"},
+  offer:{name:"Offer",full:"Direct-Response",target:10,color:"rgba(212,255,0,.16)"},
+};
+const uid=()=>Math.random().toString(36).slice(2,9);
+const toast=m=>{const t=document.getElementById('toast');t.textContent=m||"Copied";t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500)};
+const copy=(x,m)=>navigator.clipboard.writeText(x).then(()=>toast(m));
+const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const val=id=>{const e=document.getElementById(id);return e?e.value:""};
+
+/* ---------- section shell ---------- */
+function shell(id,no,railTitle,railNote,inner){
+  return `<section id="${id}"><div class="page"><div class="sec">
+    <div class="rail"><div class="inner">
+      <div class="no">${no}</div>
+      <div class="rt">${railTitle}${railNote?`<br><span style="color:var(--dim)">${railNote}</span>`:""}</div>
+    </div></div>
+    <div class="content">${inner}</div>
+  </div></div></section>`;
+}
+
+/* ---------- TODAY ---------- */
+const TODAY_STEPS=[
+  {k:"warmup",t:"Warm up: comment on 5–10 ICP / peer posts",w:"10–15 min, right before you post. Primes reach + relationships."},
+  {k:"publish",t:"Publish today's post",w:"Hook first. Grab it from 03 Batch — or have OLLIN:AI draft it."},
+  {k:"replies",t:"Reply to every comment within 2 hours",w:"The algorithm rewards fast dialogue."},
+  {k:"dms",t:"DM 1–3 people who engaged — zero pitch, pure curiosity",w:"This is where content becomes pipeline."},
+  {k:"log",t:"Log the post in 02 Mix + any DMs in 04 Engage",w:"30 seconds. Keeps the scoreboard honest."},
+];
+function viewToday(){
+  const done=TODAY_STEPS.filter(s=>S.today.checks[s.k]).length;
+  const pct=Math.round(done/TODAY_STEPS.length*100);
+  return shell("today","00","Today's run","daily ritual",`
+  <h2>The daily run<span class="v">.</span></h2>
+  <p class="lede">The whole system in five moves. Do them in order. <strong>${done} of ${TODAY_STEPS.length} done today.</strong></p>
+  <div class="progress-outer"><div class="progress-inner" style="width:${pct}%"></div></div>
+  <div>
+  ${TODAY_STEPS.map(s=>`
+    <div class="check ${S.today.checks[s.k]?'done':''}" onclick="toggleToday('${s.k}')">
+      <input type="checkbox" ${S.today.checks[s.k]?'checked':''} onclick="event.stopPropagation();toggleToday('${s.k}')">
+      <div><div class="txt">${s.t}</div><div class="why">${s.w}</div></div>
+    </div>`).join('')}
+  </div>
+  <div class="row" style="margin-top:22px">
+    <button class="btn" onclick="finishDay()">Posted → count it</button>
+    <button class="btn ghost" onclick="resetToday()">Reset for tomorrow</button>
+  </div>
+  <div class="blk" style="margin-top:44px;border-bottom:1px solid var(--border)">
+    <div class="bh"><h3>Gather an idea</h3><span class="mono">quick capture</span></div>
+    <textarea id="ideaBox" placeholder="Saw something? Heard something on a call? Dump it before it evaporates…">${esc(S.today.idea||"")}</textarea>
+    <div class="row" style="margin-top:12px">
+      <button class="btn ghost" onclick="saveIdea()">Save</button>
+      <button class="btn ghost" onclick="ideaToBatch()">→ Draft in 03</button>
+      <button class="btn ai" onclick="ideaToAI()">Ask OLLIN:AI to write it</button>
+    </div>
+  </div>`);
+}
+function toggleToday(k){S.today.checks[k]=!S.today.checks[k];renderSec('today')}
+function finishDay(){markToday();toast("Streak "+S.streak+"d — still posting")}
+function resetToday(){S.today.checks={};renderSec('today')}
+function bumpStreak(){finishDay()}
+function renderStreak(){document.getElementById('streakNum').textContent=S.streak}
+function saveIdea(){S.today.idea=val('ideaBox');persist();toast("Saved")}
+function ideaToBatch(){const v=val('ideaBox').trim();if(!v){toast("Nothing to send");return}
+  S.posts.push({id:uid(),hook:v.split("\n")[0],body:v,type:"edu",format:"Short-form",status:"Draft",date:new Date().toLocaleDateString()});
+  S.today.idea="";toast("Draft created in 03 Batch");renderSec('today');renderSec('batch')}
+function ideaToAI(){const v=val('ideaBox').trim();if(!v){toast("Write the idea first");return}
+  S.today.idea=v;toggleAI(true);
+  document.getElementById('aiInput').value="Turn this idea into a LinkedIn post (2 versions, hook-first): "+v}
+
+/* ---------- 01 FOUNDATION ---------- */
+const F_CHECKS=[
+  {k:"headline",t:"Headline is a value statement (outcome + who), not a job title"},
+  {k:"about",t:"About reads like a landing page: their problem → outcomes → CTA"},
+  {k:"cta",t:"CTA exists: book-a-call link or a grabbable resource"},
+  {k:"featured",t:"Featured pinned: best posts, lead magnet, case study, booking link"},
+  {k:"photo",t:"Photo + banner look like someone a VP would take a call with"},
+];
+function viewFoundation(){
+  return shell("foundation","01","Foundation","positioning & profile",`
+  <h2>Your profile is the<br>landing page<span class="v">.</span></h2>
+  <p class="lede">Before posting: a profile built for your exact ICP. Every post you ever publish drives here — <strong>make it convert.</strong></p>
+  <div class="blk">
+    <div class="bh"><h3>Who am I talking to</h3><span class="pill solid">ICP</span></div>
+    <span class="lab">My ICP — titles · industry · company size</span>
+    <input type="text" id="f_icp" value="${esc(S.foundation.icp)}" placeholder="e.g., VPs of Sales & IT Directors at mid-market B2B companies in Chicago">
+    <span class="lab">The 2–3 core problems I solve for them</span>
+    <textarea id="f_problems" placeholder="1. Deal cycles too long&#10;2. Team can't scale delivery">${esc(S.foundation.problems)}</textarea>
+  </div>
+  <div class="blk">
+    <div class="bh"><h3>Headline builder</h3></div>
+    <div class="pull" style="margin-bottom:18px">Helping <i>[ICP]</i> achieve <i>[outcome]</i> | <i>[Role]</i> @ <i>[Company]</i></div>
+    <span class="lab">My headline</span>
+    <input type="text" id="f_headline" value="${esc(S.foundation.headline)}" placeholder="Helping ___ achieve ___ | ___ @ ___">
+    <span class="lab">About draft — their problems → outcomes delivered → CTA</span>
+    <textarea id="f_about" style="min-height:120px" placeholder="You're a VP of Sales and your pipeline is…">${esc(S.foundation.about)}</textarea>
+    <div class="row" style="margin-top:14px">
+      <button class="btn" onclick="saveFoundation()">Save</button>
+      <button class="btn ghost" onclick="copyFoundation()">Copy headline + about</button>
+      <button class="btn ai" onclick="aiFoundation()">Ask OLLIN:AI to write these</button>
+    </div>
+  </div>
+  <div class="blk">
+    <div class="bh"><h3>Profile checklist</h3></div>
+    ${F_CHECKS.map(c=>`<div class="check ${S.foundation.checks[c.k]?'done':''}" onclick="toggleF('${c.k}')">
+      <input type="checkbox" ${S.foundation.checks[c.k]?'checked':''} onclick="event.stopPropagation();toggleF('${c.k}')">
+      <div class="txt">${c.t}</div></div>`).join('')}
+  </div>`);
+}
+function saveFoundation(){S.foundation.icp=val('f_icp');S.foundation.problems=val('f_problems');S.foundation.headline=val('f_headline');S.foundation.about=val('f_about');persist();toast("Saved")}
+function copyFoundation(){saveFoundation();copy("HEADLINE:\n"+S.foundation.headline+"\n\nABOUT:\n"+S.foundation.about,"Copied — paste into LinkedIn")}
+function toggleF(k){S.foundation.checks[k]=!S.foundation.checks[k];renderSec('foundation')}
+function aiFoundation(){saveFoundation();toggleAI(true);document.getElementById('aiInput').value="Help me write my LinkedIn headline and About section. Draft 3 headline options and a full About draft based on my ICP and problems."}
+
+/* ---------- 02 MIX ---------- */
+function mixCounts(){const c={edu:0,proof:0,contrarian:0,offer:0};S.posts.filter(p=>p.status==="Posted").forEach(p=>c[p.type]!==undefined&&c[p.type]++);return c}
+function viewMix(){
+  const c=mixCounts();const total=Object.values(c).reduce((a,b)=>a+b,0);
+  const pct=k=>total?Math.round(c[k]/total*100):0;
+  return shell("mix","02","The Mix","40 / 30 / 20 / 10",`
+  <h2>Four parts,<br>one voice<span class="v">.</span></h2>
+  <p class="lede">Authority + pipeline come from balance: <strong>40 educate · 30 prove · 20 provoke · 10 offer.</strong> Your published posts, measured against it:</p>
+  <div class="mixbar">${total?Object.keys(TYPES).map(k=>`<div style="width:${pct(k)}%;background:${TYPES[k].color}" title="${TYPES[k].full}: ${pct(k)}%"></div>`).join(''):''}</div>
+  <div class="legend">${Object.keys(TYPES).map(k=>`<span><span class="dot" style="background:${TYPES[k].color}"></span>${TYPES[k].name}: <b>${pct(k)}%</b> <span style="color:var(--dim)">/ ${TYPES[k].target}</span></span>`).join('')}</div>
+  ${total===0?'<div class="note">Mark posts "Posted" in 03 Batch and the real mix shows here.</div>':''}
+  <div style="margin-top:34px">
+  ${Object.keys(TYPES).map(k=>`
+  <div class="blk">
+    <div class="bh"><h3>${TYPES[k].full}</h3><span class="pill volt">${TYPES[k].target}%</span></div>
+    <div class="note" style="margin:0 0 6px">${{
+      edu:"How-to guides, frameworks, teardowns — solve one micro-problem your ICP has this week.",
+      proof:"Anonymized deal stories, transformations, before/after numbers. Real stories only — never invented.",
+      contrarian:"Industry observations, mistakes your ICP keeps making, your philosophy. Say what others won't.",
+      offer:"Free checklist, template, audit, 'DM me for X'. One in ten posts — keep it rare so it lands."}[k]}</div>
+    <span class="lab">Idea bank</span>
+    <textarea id="ideas_${k}" placeholder="Stack ideas here…">${esc(S.ideas[k]||"")}</textarea>
+    <div class="row" style="margin-top:10px"><button class="btn ghost" onclick="saveIdeas('${k}')">Save</button></div>
+  </div>`).join('')}
+  </div>`);
+}
+function saveIdeas(k){S.ideas[k]=val('ideas_'+k);persist();toast("Saved")}
+
+/* ---------- 03 BATCH ---------- */
+let timerLeft=0,timerInt=null;
+function viewBatch(){
+  const drafts=S.posts.filter(p=>p.status!=="Posted");
+  const posted=S.posts.filter(p=>p.status==="Posted");
+  return shell("batch","03","Batch Studio","60–90 min · weekly",`
+  <h2>Draft weekly,<br>post daily<span class="v">.</span></h2>
+  <p class="lede">One 60–90 minute block per week → <strong>3–5 posts drafted.</strong> No daily brainstorming, ever. That's how the streak survives.</p>
+  <div class="row" style="margin-bottom:30px">
+    <div class="timer" id="timerDisp">${fmtTime(timerLeft)}</div>
+    <button class="btn" onclick="startTimer(60)">60 min</button>
+    <button class="btn" onclick="startTimer(90)">90 min</button>
+    <button class="btn ghost" onclick="stopTimer()">Stop</button>
+    <span class="mono">goal: 3–5 drafts · hooks first, polish later</span>
+  </div>
+  <div class="blk">
+    <div class="bh"><h3>New draft</h3></div>
+    <span class="lab">Hook — first 2 lines, before "…see more" · benefit, stat, or counter-intuitive</span>
+    <textarea id="b_hook" placeholder="Most VPs of Sales review pipeline weekly.&#10;It's exactly why their forecasts miss."></textarea>
+    <div class="hookpreview" id="hookPrev" style="display:none"></div>
+    <div class="row" style="margin-top:8px"><button class="btn ghost" onclick="previewHook()">Preview the cut-off</button></div>
+    <span class="lab">Body</span>
+    <textarea id="b_body" style="min-height:110px" placeholder="Rest of the post…"></textarea>
+    <div class="grid2">
+      <div><span class="lab">Content type</span>
+        <select id="b_type">${Object.keys(TYPES).map(k=>`<option value="${k}">${TYPES[k].full} (${TYPES[k].target}%)</option>`).join('')}</select></div>
+      <div><span class="lab">Format</span>
+        <select id="b_format"><option>Short-form (100–150 words)</option><option>Long-form (250–400 words)</option><option>PDF carousel / document</option><option>Image + text</option></select></div>
+    </div>
+    <div class="row" style="margin-top:16px"><button class="btn" onclick="addPost()">+ Add draft</button></div>
+  </div>
+  <div class="blk">
+    <div class="bh"><h3>Drafts</h3><span class="pill dim">${drafts.length}</span></div>
+    ${drafts.length?drafts.map(postItem).join(''):'<div class="note">No drafts yet. That focus block is calling.</div>'}
+  </div>
+  <div class="blk">
+    <div class="bh"><h3>Published</h3><span class="pill solid">${posted.length}</span></div>
+    ${posted.length?posted.map(postItem).join(''):'<div class="note">Mark a draft Posted when it goes live — it feeds your Mix + streak.</div>'}
+  </div>`);
+}
+function postItem(p){const t=TYPES[p.type]||TYPES.edu;return `<div class="post-item">
+  <div class="hook">${esc(p.hook)}</div>
+  <div class="meta"><span class="pill volt">${t.name}</span><span>${esc(p.format)}</span><span>${p.date||""}</span>
+  ${p.status!=="Posted"?`<button class="btn" style="padding:8px 13px" onclick="markPosted('${p.id}')">Mark posted</button>
+    <button class="btn ghost" style="padding:8px 13px" onclick="copyPost('${p.id}')">Copy</button>
+    <button class="btn x" onclick="delPost('${p.id}')">✕</button>`
+    :`<button class="btn ghost" style="padding:8px 13px" onclick="copyPost('${p.id}')">Copy</button>`}</div></div>`}
+function previewHook(){const v=val('b_hook');const el=document.getElementById('hookPrev');
+  if(!v.trim()){el.style.display="none";return}
+  el.innerHTML=v.split("\n").slice(0,2).map(esc).join("<br>")+' <span class="seemore">…see more</span>';el.style.display="block"}
+function addPost(){const hook=val('b_hook').trim();if(!hook){toast("Write the hook first");return}
+  S.posts.push({id:uid(),hook,body:val('b_body').trim(),type:val('b_type'),format:val('b_format'),status:"Draft",date:new Date().toLocaleDateString()});
+  toast("Draft added");renderSec('batch')}
+function markPosted(id){const p=S.posts.find(p=>p.id===id);if(p){p.status="Posted";p.date=new Date().toLocaleDateString()}markToday();toast("Posted — mix updated");renderSec('batch');renderSec('mix')}
+function delPost(id){S.posts=S.posts.filter(p=>p.id!==id);renderSec('batch');renderSec('mix')}
+function copyPost(id){const p=S.posts.find(p=>p.id===id);if(p)copy(p.hook+"\n\n"+(p.body||""),"Post copied")}
+function fmtTime(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+function startTimer(min){stopTimer();timerLeft=min*60;timerInt=setInterval(()=>{timerLeft--;const d=document.getElementById('timerDisp');if(d)d.textContent=fmtTime(Math.max(timerLeft,0));if(timerLeft<=0){stopTimer();toast("Block done — how many drafts?")}},1000);const d=document.getElementById('timerDisp');if(d)d.textContent=fmtTime(timerLeft)}
+function stopTimer(){if(timerInt){clearInterval(timerInt);timerInt=null}}
+
+/* ---------- 04 ENGAGE ---------- */
+const DM_TEMPLATES=[
+  {name:"Post engager → curiosity",body:"Thanks for checking out the post on [topic], [Name]. Curious — are you running into [problem] at [Company] right now?"},
+  {name:"Repeat liker → open door",body:"[Name] — noticed you've engaged with a couple of my posts on [topic]. What's got your attention on it?"},
+  {name:"Commenter → deepen",body:"Loved your comment on [point], [Name]. How are you handling that at [Company] today?"},
+  {name:"Profile viewer → soft open",body:"[Name], saw you stopped by my profile — happy to connect. What are you focused on at [Company] this quarter?"},
+];
+function viewEngage(){
+  return shell("engage","04","Engage","zero pitch · pure curiosity",`
+  <h2>Comments are<br>currency<span class="v">.</span></h2>
+  <p class="lede">Publishing is half the job. <strong>Conversations are the other half.</strong> The first DM never pitches — it opens a door. The pipeline walks through later.</p>
+  <div class="blk">
+    <div class="bh"><h3>DM transition scripts</h3></div>
+    ${DM_TEMPLATES.map((t,i)=>`<div class="post-item">
+      <div class="mono" style="margin-bottom:6px">${t.name}</div>
+      <div style="font-size:14px;color:var(--body)">${esc(t.body)}</div>
+      <div class="meta"><button class="btn ghost" style="padding:8px 13px" onclick="copyDMT(${i})">Copy</button></div></div>`).join('')}
+  </div>
+  <div class="blk">
+    <div class="bh"><h3>Conversation log</h3><span class="mono">this is the number that matters</span></div>
+    <div class="grid2">
+      <div><span class="lab">Name / company</span><input type="text" id="dm_name" placeholder="Sarah K — Acme Corp"></div>
+      <div><span class="lab">Context / next step</span><input type="text" id="dm_ctx" placeholder="Engaged on pipeline post → asked about Q4 process"></div>
+    </div>
+    <div class="row" style="margin-top:14px"><button class="btn" onclick="addDM()">+ Log conversation</button></div>
+    ${S.dms.length?`<table><tr><th>Who</th><th>Context / next step</th><th>Date</th><th></th></tr>
+      ${S.dms.map(d=>`<tr><td style="color:var(--white);font-weight:700">${esc(d.name)}</td><td>${esc(d.context)}</td><td style="color:var(--dim)">${d.date}</td>
+      <td><button class="btn x" onclick="delDM('${d.id}')">✕</button></td></tr>`).join('')}</table>`:''}
+  </div>`);
+}
+function copyDMT(i){copy(DM_TEMPLATES[i].body,"Script copied — personalize it")}
+function addDM(){const n=val('dm_name').trim();if(!n){toast("Add a name");return}
+  S.dms.unshift({id:uid(),name:n,context:val('dm_ctx').trim(),date:new Date().toLocaleDateString()});toast("Logged");renderSec('engage')}
+function delDM(id){S.dms=S.dms.filter(d=>d.id!==id);renderSec('engage')}
+
+/* ---------- 05 SCORE ---------- */
+function viewScore(){
+  const tot=S.metrics.reduce((a,m)=>({dms:a.dms+ +m.dms,views:a.views+ +m.views,meetings:a.meetings+ +m.meetings}),{dms:0,views:0,meetings:0});
+  const max=Math.max(1,...S.metrics.map(m=>Math.max(+m.dms,+m.views,+m.meetings)));
+  return shell("score","05","Scoreboard","conversion &gt; vanity",`
+  <h2>Impressions<br>don't pay<span class="v">.</span></h2>
+  <p class="lede">These three numbers do. <strong>We cheer the reps, not the likes.</strong></p>
+  <div class="statgrid">
+    <div class="stat"><div class="big">${tot.dms}</div><div class="mono" style="margin-top:10px">Inbound ICP DMs</div></div>
+    <div class="stat"><div class="big">${tot.views}</div><div class="mono" style="margin-top:10px">ICP profile views</div></div>
+    <div class="stat"><div class="big" style="color:var(--volt)">${tot.meetings}</div><div class="mono" style="margin-top:10px">Meetings booked</div></div>
+  </div>
+  <div class="blk" style="margin-top:34px">
+    <div class="bh"><h3>Log this week</h3></div>
+    <div class="row">
+      <div style="flex:1;min-width:110px"><span class="lab">Week of</span><input type="text" id="m_week" placeholder="Aug 11"></div>
+      <div style="flex:1;min-width:100px"><span class="lab">Inbound DMs</span><input type="number" id="m_dms" min="0" value="0"></div>
+      <div style="flex:1;min-width:100px"><span class="lab">ICP views</span><input type="number" id="m_views" min="0" value="0"></div>
+      <div style="flex:1;min-width:100px"><span class="lab">Meetings</span><input type="number" id="m_meet" min="0" value="0"></div>
+    </div>
+    <div class="row" style="margin-top:14px"><button class="btn" onclick="addMetric()">+ Add week</button></div>
+    ${S.metrics.length?`<table><tr><th>Week</th><th>DMs</th><th>Views</th><th>Meetings</th><th></th></tr>
+      ${S.metrics.map(m=>`<tr><td style="color:var(--white);font-weight:700">${esc(m.week)}</td>
+      <td>${m.dms}</td><td>${m.views}</td><td>${m.meetings}</td>
+      <td><button class="btn x" onclick="delMetric('${m.id}')">✕</button></td></tr>`).join('')}</table>`:''}
+  </div>
+  <div class="blk">
+    <div class="bh"><h3>Monthly review ritual</h3></div>
+    <div class="pull" style="margin-bottom:14px">Find the top 20%. Do more of that. <i>Kill what didn't convert — even if it got likes.</i></div>
+    <div class="note" style="font-size:13.5px;color:var(--body)">
+      1 · Pull your top 20% posts by DMs + ICP comments.&nbsp;&nbsp;
+      2 · Note shared topics + formats.&nbsp;&nbsp;
+      3 · Rebuild next month's idea banks (02) around those patterns.<br><br>
+      <span class="mono" style="color:var(--volt)">◆ Or hit "Review my mix" in OLLIN:AI and do it together.</span>
+    </div>
+  </div>`);
+}
+function addMetric(){S.metrics.unshift({id:uid(),week:val('m_week').trim()||"Week",dms:+val('m_dms')||0,views:+val('m_views')||0,meetings:+val('m_meet')||0});toast("Logged");renderSec('score')}
+function delMetric(id){S.metrics=S.metrics.filter(m=>m.id!==id);renderSec('score')}
+
+/* ---------- OLLIN:AI ---------- */
+function toggleAI(open){
+  document.getElementById('drawer').classList.toggle('open',open);
+  document.querySelector('.ailaunch').style.display = open ? 'none' : '';
+  if(open)setTimeout(()=>document.getElementById('aiInput').focus(),200);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleAI(false)});
+function aiContext(){
+  const c=mixCounts();const total=Object.values(c).reduce((a,b)=>a+b,0);
+  const drafts=S.posts.filter(p=>p.status!=="Posted").map(p=>"- "+p.hook).join("\n")||"(none)";
+  return `CONTEXT — Marcos's MUUL workspace (LinkedIn B2B content engine):
+ICP: ${S.foundation.icp||"(not set)"}
+Problems solved: ${S.foundation.problems||"(not set)"}
+Headline: ${S.foundation.headline||"(not set)"}
+Published mix: ${total} posts (Educate ${c.edu}, Prove ${c.proof}, Provoke ${c.contrarian}, Offer ${c.offer}; targets 40/30/20/10)
+Current drafts:\n${drafts}
+Streak: ${S.streak} days.
+
+MUUL RULES: hook must survive the "...see more" cut (first 2 lines). Human voice, short lines, no corporate polish. Social proof = real stories only, never invented. Marcos has ADHD: TLDR first, keep it punchy. Goal: become the go-to SME for his ICP (Chicago-focused where relevant); content = pipeline, DMs/meetings over likes.`;
+}
+const QUICK={
+  draft:"Draft today's LinkedIn post for me. Pick the content type my mix needs most, write 2 versions, hook-first, 100-150 words each.",
+  hook:"Here's my current draft hook — rewrite the first 2 lines 5 ways: benefit, stat, counter-intuitive, story-opener, blunt truth:\n\n[PASTE OR TYPE YOUR HOOK]",
+  news:"What's today's top B2B business news relevant to my ICP? Top 5, one line each + a post angle for each. TLDR first.",
+  chicago:"What's happening in Chicago business this week? Top 5 items + a LinkedIn post angle for each that makes me the local SME paying attention. TLDR first.",
+  review:"Review my content mix vs the 40/30/20/10 target and my drafts. What should I post next and why? TLDR first, bullets.",
+};
+function quickAI(k){document.getElementById('aiInput').value=QUICK[k];sendAI()}
+function pushMsg(role,text,extra){
+  const box=document.getElementById('dchat');
+  const div=document.createElement('div');
+  div.className='msg '+(role==='user'?'user':'ai');
+  div.innerHTML=(role==='ai'?'<div class="tagai">Ollin</div>':'<div class="tagme">Marcos</div>')+esc(text)+(extra||'');
+  box.appendChild(div);
+  box.scrollTop=box.scrollHeight;return div;
+}
+async function sendAI(){
+  const input=document.getElementById('aiInput');
+  const q=input.value.trim();if(!q)return;
+  input.value='';pushMsg('user',q);
+  S.chat.push({role:'user',content:q});persist();
+  const key=val('apiKey').trim();
+  if(!key){
+    const full=aiContext()+"\n\n---\nMARCOS ASKS:\n"+q;
+    copy(full,"Prompt + your context copied — paste to Claude");
+    pushMsg('ai',"No API key set, so I packed your full context + question and copied it to your clipboard. Paste it to Claude (Cowork), then paste the answer back here or straight into a draft.\n\nWant me answering inline? Drop an Anthropic API key below — it stays in memory only.");
+    return;
+  }
+  const think=pushMsg('ai','');think.innerHTML='<div class="thinking">OLLIN:AI is thinking…</div>';
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:1500,system:aiContext(),messages:S.chat.slice(-12)})
+    });
+    if(!res.ok){const e=await res.text();throw new Error(res.status+" "+e.slice(0,200))}
+    const data=await res.json();
+    const text=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join("\n").trim()||"(empty reply)";
+    S.chat.push({role:'assistant',content:text});
+    think.innerHTML='<div class="tagai">Ollin</div>'+esc(text)+
+      `<div class="useit"><button class="btn ghost" style="padding:8px 13px" onclick="aiToDraft(this)">→ Save as draft</button>
+       <button class="btn ghost" style="padding:8px 13px" onclick="copyMsg(this)">Copy</button></div>`;
+    think.dataset.raw=text;
+    document.getElementById('dchat').scrollTop=1e9;
+  }catch(err){
+    think.innerHTML='<div class="tagai">Ollin</div>Call failed: '+esc(err.message)+"\n\nCheck the key, or clear it to use copy-prompt mode.";
+  }
+}
+function aiToDraft(btn){
+  const raw=btn.closest('.msg').dataset.raw||"";
+  const lines=raw.split("\n").filter(l=>l.trim());
+  S.posts.push({id:uid(),hook:lines.slice(0,2).join("\n")||"OLLIN:AI draft",body:raw,type:"edu",format:"Short-form",status:"Draft",date:new Date().toLocaleDateString()});
+  toast("Saved to 03 Batch");renderSec('batch');
+}
+function copyMsg(btn){copy(btn.closest('.msg').dataset.raw||"","Copied")}
+
+/* ---------- data ---------- */
+function exportData(){const blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="muul-data.json";a.click();toast("Exported")}
+function importData(ev){const f=ev.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=e=>{try{Object.assign(S,JSON.parse(e.target.result));renderStreak();renderAll();toast("Imported")}catch(_){toast("Couldn't read that file")}};r.readAsText(f)}
+
+/* ---------- render ---------- */
+const VIEWS={today:viewToday,foundation:viewFoundation,mix:viewMix,batch:viewBatch,engage:viewEngage,score:viewScore};
+function renderAll(){
+  document.getElementById('app').innerHTML=Object.values(VIEWS).map(v=>v()).join('');
+  persist();
+}
+function renderSec(id){
+  const old=document.getElementById(id);
+  if(!old){renderAll();return}
+  const tmp=document.createElement('div');tmp.innerHTML=VIEWS[id]();
+  old.replaceWith(tmp.firstElementChild);
+  persist();
+}
+/* --- boot: restore, midnight reset, streak --- */
+(function boot(){
+  try{const raw=localStorage.getItem('muul-state');if(raw)Object.assign(S,JSON.parse(raw))}catch(e){}
+  if(!S.postedDays)S.postedDays=[];
+  if(S.lastDay!==DAY()){S.today.checks={};S.lastDay=DAY();}
+  S.streak=computeStreak();
+})();
+renderAll();renderStreak();
+</script>
+</body>
+</html>
