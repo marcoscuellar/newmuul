@@ -65,7 +65,7 @@ export const DAY = () =>
   new Date().toLocaleDateString("en-CA", { timeZone: "America/Chicago" });
 
 export function computeStreak(postedDays: string[]): number {
-  const days = [...new Set(postedDays)].sort().reverse();
+  const days = Array.from(new Set(postedDays)).sort().reverse();
   if (!days.length) return 0;
   const today = DAY();
   const yest = new Date(Date.now() - 864e5).toLocaleDateString("en-CA", {
