@@ -1077,11 +1077,12 @@ export default function Muul() {
       </footer>
 
       {/* OLLIN:AI companion */}
-      <div className={"scrim" + (aiOpen ? " on" : "")} onClick={() => setAiOpen(false)} />
-      <button className="ailaunch" onClick={() => setAiOpen(true)}>
-        <span className="ph">Ask OLLIN:AI</span>
-        <span className="go">→</span>
-      </button>
+      {!aiOpen && (
+        <button className="ailaunch" onClick={() => setAiOpen(true)}>
+          <span className="ph">Ask OLLIN:AI</span>
+          <span className="go">→</span>
+        </button>
+      )}
       <div className={"drawer" + (aiOpen ? " open" : "")} role="dialog" aria-label="OLLIN:AI">
         <div className="dhead">
           <span className="guide">Your guide</span>
@@ -1098,7 +1099,7 @@ export default function Muul() {
           </div>
           {s.chat.map((m, i) => (
             <div key={i} className={"msg " + (m.role === "user" ? "user" : "ai")}>
-              {m.role === "assistant" && <div className="tagai">Ollin</div>}
+              {m.role === "assistant" ? <div className="tagai">Ollin</div> : <div className="tagme">Marcos</div>}
               {m.content}
               {m.role === "assistant" && (
                 <div className="useit">
